@@ -1,16 +1,22 @@
-# Er Er Servis
+# ❄️ Er Er Servis
 
-Er Er Ticaret için servis takip ve müşteri kayıt web uygulamasıdır.
+Er Er Ticaret için geliştirilmiş modern servis takip, müşteri kayıt ve not yönetim web uygulamasıdır.
 
-## Özellikler
-- Giriş sistemi (kullanıcı adı + şifre)
-- Servis ekleme
-- Servis listeleme
-- Veriler tarayıcıda saklanır (localStorage)
+---
 
-## Giriş Bilgileri
-Kullanıcı adı: ererticaret  
-Şifre: bet796ire
+## 🚀 Özellikler
 
-## Amaç
-Klima ve kombi servis işlerini daha düzenli takip etmek.
+- 🔐 Kullanıcı kayıt sistemi
+- 🛡️ Admin şifre ile hesap oluşturma
+- 🔑 Kullanıcı giriş sistemi
+- ➕ Servis ekleme (müşteri, telefon, adres, arıza)
+- 📋 Servis listeleme
+- 📝 Günlük not sistemi ("Biz ne konuştuk")
+- 💾 Tüm veriler tarayıcıda saklanır (localStorage)
+- 📱 Modern ve mobil uyumlu tasarım
+
+---
+
+## 🔐 Admin Sistemi
+
+Hesap oluşturmak için admin şifresi gereklidir:
