@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Er Er Servis</title>
+  <style>
+    :root{
+      --bg: #0f172a;
+      --bg2:#111827;
+      --card:#0b1220cc;
+      --text:#e5eefc;
+      --muted:#94a3b8;
+      --line:#22314f;
+      --primary:#38bdf8;
+      --primary2:#22c55e;
+      --danger:#ef4444;
+      --shadow: 0 20px 60px rgba(0,0,0,.35);
+      --radius: 22px;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ margin:0; padding:0; font-family: Inter, Arial, sans-serif; background:
+      radial-gradient(circle at top left, rgba(56,189,248,.18), transparent 25%),
+      radial-gradient(circle at top right, rgba(34,197,94,.16), transparent 22%),
+      linear-gradient(180deg, #050816 0%, #0b1120 48%, #101827 100%);
+      color:var(--text);
+      min-height:100%;
+    }
+
+    a{ color:inherit; text-decoration:none; }
+    button, input, textarea{ font:inherit; }
+    button{ cursor:pointer; border:none; }
+
+    .container{
+      width:min(1200px, 92vw);
+      margin:0 auto;
+      padding:22px 0 50px;
+    }
+
+    .topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:16px;
+      margin-bottom:22px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      font-weight:800;
+      letter-spacing:.3px;
+    }
+
+    .logo{
+      width:54px;
+      height:54px;
+      border-radius:18px;
+      display:grid;
+      place-items:center;
+      background:linear-gradient(145deg, rgba(56,189,248,.22), rgba(34,197,94,.18));
+      border:1px solid rgba(148,163,184,.2);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+
+    .logo svg{ width:31px; height:31px; }
+
+    .brand small{
+      display:block;
+      color:var(--muted);
+      font-weight:600;
+      margin-top:2px;
+    }
+
+    .pill{
+      padding:10px 16px;
+      border-radius:999px;
+      background:rgba(15,23,42,.72);
+      border:1px solid rgba(148,163,184,.18);
+      color:var(--muted);
+      backdrop-filter: blur(10px);
+    }
+
+    .hero{
+      display:grid;
+      grid-template-columns: 1.3fr .9fr;
+      gap:22px;
+      align-items:stretch;
+      margin-bottom:22px;
+    }
+
+    .hero-card, .glass{
+      background:linear-gradient(180deg, rgba(17,24,39,.88), rgba(10,17,29,.78));
+      border:1px solid rgba(148,163,184,.16);
+      box-shadow:var(--shadow);
+      backdrop-filter: blur(12px);
+      border-radius:var(--radius);
+    }
+
+    .hero-left{
+      padding:34px;
+      position:relative;
+      overflow:hidden;
+      min-height:390px;
+    }
+
+    .hero-left::before{
+      content:"";
+      position:absolute;
+      inset:-1px;
+      background:
+        radial-gradient(circle at 80% 20%, rgba(56,189,248,.17), transparent 18%),
+        radial-gradient(circle at 20% 80%, rgba(34,197,94,.13), transparent 18%);
+      pointer-events:none;
+    }
+
+    .hero-badge{
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      padding:9px 14px;
+      border-radius:999px;
+      background:rgba(56,189,248,.12);
+      border:1px solid rgba(56,189,248,.25);
+      color:#cff5ff;
+      font-size:14px;
+      font-weight:700;
+      margin-bottom:16px;
+    }
+
+    .hero h1{
+      font-size: clamp(34px, 5vw, 62px);
+      line-height:1.02;
+      margin:0 0 16px;
+      max-width: 12ch;
+      position:relative;
+      z-index:1;
+    }
+
+    .hero p{
+      color:var(--muted);
+      font-size:16px;
+      line-height:1.8;
+      max-width:58ch;
+      margin:0 0 22px;
+      position:relative;
+      z-index:1;
+    }
+
+    .actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      position:relative;
+      z-index:1;
+    }
+
+    .btn{
+      padding:14px 18px;
+      border-radius:14px;
+      font-weight:800;
+      transition:.2s ease;
+    }
+
+    .btn-primary{
+      background:linear-gradient(135deg, var(--primary), #60a5fa);
+      color:#04111f;
+      box-shadow:0 12px 30px rgba(56,189,248,.28);
+    }
+
+    .btn-secondary{
+      background:rgba(255,255,255,.04);
+      color:var(--text);
+      border:1px solid rgba(148,163,184,.18);
+    }
+
+    .btn-danger{
+      background:rgba(239,68,68,.14);
+      color:#fecaca;
+      border:1px solid rgba(239,68,68,.24);
+    }
+
+    .btn:hover{ transform:translateY(-1px); }
+
+    .hero-right{
+      display:grid;
+      grid-template-rows:auto 1fr;
+      gap:16px;
+    }
+
+    .image-card{
+      overflow:hidden;
+      min-height:220px;
+      position:relative;
+    }
+
+    .image-card img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+      filter:saturate(1.1) contrast(1.02);
+    }
+
+    .image-overlay{
+      position:absolute;
+      inset:0;
+      background:linear-gradient(180deg, transparent 0%, rgba(3,7,18,.25) 55%, rgba(3,7,18,.72) 100%);
+      display:flex;
+      align-items:flex-end;
+      padding:20px;
+    }
+
+    .image-overlay strong{
+      display:block;
+      font-size:20px;
+      margin-bottom:4px;
+    }
+
+    .image-overlay span{
+      color:#dbeafe;
+      font-size:14px;
+    }
+
+    .stats{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:14px;
+    }
+
+    .stat{
+      padding:18px;
+      text-align:center;
+      border-radius:18px;
+      background:rgba(255,255,255,.03);
+      border:1px solid rgba(148,163,184,.14);
+    }
+
+    .stat b{
+      font-size:24px;
+      display:block;
+      margin-bottom:6px;
+      color:#ffffff;
+    }
+
+    .stat span{
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:22px;
+      margin-bottom:22px;
+    }
+
+    .card{
+      padding:22px;
+    }
+
+    .section-title{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:16px;
+    }
+
+    .section-title h2{
+      margin:0;
+      font-size:22px;
+    }
+
+    .section-title p{
+      margin:0;
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    .field{
+      display:grid;
+      gap:8px;
+      margin-bottom:14px;
+    }
+
+    .field label{
+      font-size:13px;
+      color:#cbd5e1;
+      font-weight:700;
+    }
+
+    .field input,
+    .field textarea{
+      width:100%;
+      padding:14px 15px;
+      border-radius:14px;
+      border:1px solid rgba(148,163,184,.18);
+      background:rgba(2,6,23,.35);
+      color:var(--text);
+      outline:none;
+      transition:.2s ease;
+    }
+
+    .field input:focus,
+    .field textarea:focus{
+      border-color:rgba(56,189,248,.5);
+      box-shadow:0 0 0 4px rgba(56,189,248,.08);
+    }
+
+    textarea{
+      min-height:120px;
+      resize:vertical;
+    }
+
+    .split{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+    }
+
+    .note-box{
+      min-height:200px;
+    }
+
+    .list{
+      display:grid;
+      gap:14px;
+    }
+
+    .service{
+      padding:16px;
+      border-radius:18px;
+      border:1px solid rgba(148,163,184,.14);
+      background:rgba(255,255,255,.03);
+    }
+
+    .service-top{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      align-items:flex-start;
+      margin-bottom:10px;
+    }
+
+    .service-top strong{
+      font-size:17px;
+    }
+
+    .tag{
+      padding:7px 10px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:800;
+      background:rgba(34,197,94,.14);
+      color:#bbf7d0;
+      border:1px solid rgba(34,197,94,.22);
+      white-space:nowrap;
+    }
+
+    .service p{
+      margin:8px 0 0;
+      color:#dbe4f3;
+      line-height:1.6;
+      font-size:14px;
+    }
+
+    .service .meta{
+      margin-top:10px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .meta span{
+      padding:6px 9px;
+      border-radius:999px;
+      background:rgba(148,163,184,.08);
+      border:1px solid rgba(148,163,184,.1);
+    }
+
+    .auth{
+      max-width:480px;
+      margin:0 auto 22px;
+      padding:26px;
+    }
+
+    .hidden{ display:none !important; }
+
+    .footer{
+      margin-top:18px;
+      text-align:center;
+      color:var(--muted);
+      font-size:13px;
+      padding-bottom:10px;
+    }
+
+    .tiny{
+      font-size:12px;
+      color:var(--muted);
+      line-height:1.6;
+    }
+
+    .ok{
+      margin-top:12px;
+      color:#bbf7d0;
+      font-size:14px;
+      min-height:20px;
+    }
+
+    .warn{
+      margin-top:12px;
+      color:#fecaca;
+      font-size:14px;
+      min-height:20px;
+    }
+
+    .divider{
+      height:1px;
+      background:rgba(148,163,184,.14);
+      margin:18px 0;
+    }
+
+    .image-row{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:14px;
+      margin-top:14px;
+    }
+
+    .mini-img{
+      position:relative;
+      height:150px;
+      overflow:hidden;
+      border-radius:18px;
+      border:1px solid rgba(148,163,184,.14);
+    }
+
+    .mini-img img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+
+    .mini-img span{
+      position:absolute;
+      left:14px;
+      bottom:12px;
+      z-index:2;
+      padding:7px 10px;
+      border-radius:999px;
+      background:rgba(3,7,18,.58);
+      color:#fff;
+      font-size:12px;
+      font-weight:700;
+      border:1px solid rgba(255,255,255,.08);
+    }
+
+    @media (max-width: 920px){
+      .hero, .grid, .split, .image-row, .stats{ grid-template-columns:1fr; }
+      .hero-left{ min-height:auto; }
+      .topbar{ flex-direction:column; align-items:flex-start; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo">
+          <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M15 24C15 16.268 21.268 10 29 10h6c7.732 0 14 6.268 14 14v16c0 7.732-6.268 14-14 14h-6c-7.732 0-14-6.268-14-14V24Z" stroke="#7dd3fc" stroke-width="3"/>
+            <path d="M20 21h24M20 30h24M20 39h15" stroke="#a7f3d0" stroke-width="4" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div>
+          Er Er Servis
+          <small>Klima ve kombi servis takibi</small>
+        </div>
+      </div>
+      <div class="pill" id="clock">Hazırlanıyor…</div>
+    </div>
+
+    <section class="hero">
+      <div class="hero-card hero-left">
+        <div class="hero-badge">❄️ Bursa’da servis takibi için canlı panel</div>
+        <h1>Er Er Ticaret için profesyonel servis sitesi</h1>
+        <p>
+          Müşteri kaydı, servis notu, günlük işler ve ekip içi notları tek yerde tutan,
+          hızlı ve modern bir çalışma ekranı.
+        </p>
+        <div class="actions">
+          <button class="btn btn-primary" onclick="showAuth()">Giriş Yap</button>
+          <button class="btn btn-secondary" onclick="fillDemo()">Örnek veri doldur</button>
+          <button class="btn btn-secondary" onclick="scrollToPanel()">Panellere git</button>
+        </div>
+
+        <div class="image-row">
+          <div class="mini-img">
+            <img src="https://images.unsplash.com/photo-1581091226825-c6a89e7e5b7e?auto=format&fit=crop&w=900&q=80" alt="Klima servis">
+            <span>Klima montajı</span>
+          </div>
+          <div class="mini-img">
+            <img src="https://images.unsplash.com/photo-1615874959474-d609969a20ed?auto=format&fit=crop&w=900&q=80" alt="Teknik servis">
+            <span>Teknik servis</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-right">
+        <div class="hero-card image-card">
+          <img src="https://images.unsplash.com/photo-1621905252507-b35492cc74b4?auto=format&fit=crop&w=1200&q=80" alt="Klima servisi">
+          <div class="image-overlay">
+            <div>
+              <strong>Günlük servis düzeni</strong>
+              <span>Gelen işler, notlar ve kayıtlar tek panelde.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="stats">
+          <div class="stat">
+            <b id="statServices">0</b>
+            <span>Servis kaydı</span>
+          </div>
+          <div class="stat">
+            <b id="statNotes">0</b>
+            <span>Not satırı</span>
+          </div>
+          <div class="stat">
+            <b>24/7</b>
+            <span>Hazır panel</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="authSection" class="hero-card auth hidden">
+      <div class="section-title">
+        <div>
+          <h2>Giriş / Kayıt</h2>
+          <p>Önce hesap oluştur, sonra giriş yap.</p>
+        </div>
+        <span class="tag">Admin onaylı</span>
+      </div>
+
+      <div class="split">
+        <div>
+          <div class="field">
+            <label>Kullanıcı adı</label>
+            <input id="regUser" placeholder="Örn: ererticaret" autocomplete="off">
+          </div>
+          <div class="field">
+            <label>Şifre</label>
+            <input id="regPass" type="password" placeholder="Şifre oluştur">
+          </div>
+          <div class="field">
+            <label>Admin şifresi</label>
+            <input id="regAdmin" type="password" placeholder="Admin şifresi">
+          </div>
+          <button class="btn btn-primary" style="width:100%;" onclick="register()">Hesap Oluştur</button>
+          <div class="ok" id="regMsg"></div>
+        </div>
+
+        <div>
+          <div class="field">
+            <label>Kullanıcı adı</label>
+            <input id="loginUser" placeholder="Kullanıcı adı" autocomplete="off">
+          </div>
+          <div class="field">
+            <label>Şifre</label>
+            <input id="loginPass" type="password" placeholder="Şifre">
+          </div>
+          <button class="btn btn-secondary" style="width:100%;" onclick="login()">Giriş Yap</button>
+          <div class="warn" id="loginMsg"></div>
+          <div class="divider"></div>
+          <div class="tiny">
+            Girişten sonra servis kayıt alanı açılır. Tüm veriler tarayıcıda saklanır.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="appSection" class="grid hidden">
+      <div class="glass card" id="panel">
+        <div class="section-title">
+          <div>
+            <h2>Servis Ekle</h2>
+            <p>Yeni gelen işi hızlıca kayıt altına al.</p>
+          </div>
+          <button class="btn btn-danger" onclick="logout()">Çıkış Yap</button>
+        </div>
+
+        <div class="field">
+          <label>Müşteri adı</label>
+          <input id="customerName" placeholder="Ad soyad">
+        </div>
+
+        <div class="field">
+          <label>Telefon</label>
+          <input id="phone" placeholder="05xx xxx xx xx">
+        </div>
+
+        <div class="field">
+          <label>Adres</label>
+          <input id="address" placeholder="İlçe / mahalle / sokak">
+        </div>
+
+        <div class="field">
+          <label>Arıza açıklaması</label>
+          <textarea id="issue" placeholder="Klima soğutmuyor, kombi ateşleme yapmıyor..."></textarea>
+        </div>
+
+        <button class="btn btn-primary" style="width:100%;" onclick="addService()">Servisi Kaydet</button>
+        <div class="ok" id="saveMsg"></div>
+      </div>
+
+      <div class="glass card">
+        <div class="section-title">
+          <div>
+            <h2>Biz ne konuştuk</h2>
+            <p>Günlük notlar, yapılacaklar, kısa açıklamalar.</p>
+          </div>
+          <button class="btn btn-secondary" onclick="saveNotes()">Notu Kaydet</button>
+        </div>
+
+        <div class="field note-box">
+          <label>Notlar</label>
+          <textarea id="notes" placeholder="Bugün hangi işler var, hangi parça alınacak, kim aranacak..."></textarea>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="section-title">
+          <div>
+            <h2>Servis Listesi</h2>
+            <p>Kaydedilen işler burada görünür.</p>
+          </div>
+          <span class="tag" id="countTag">0 kayıt</span>
+        </div>
+
+        <div class="list" id="serviceList"></div>
+      </div>
+    </section>
+
+    <div class="footer">
+      Er Er Ticaret • Bursa • Klima & Kombi Servis Paneli
+    </div>
+  </div>
+
+  <script>
+    const ADMIN_CODE = "mke2012mke";
+    const DEFAULT_USER = "ererticaret";
+    const DEFAULT_PASS = "bet796ire";
+
+    let users = JSON.parse(localStorage.getItem("users") || "[]");
+    let services = JSON.parse(localStorage.getItem("services") || "[]");
+    let notes = localStorage.getItem("notes") || "";
+    let sessionUser = localStorage.getItem("sessionUser") || "";
+
+    if (users.length === 0) {
+      users.push({ user: DEFAULT_USER, pass: DEFAULT_PASS });
+      localStorage.setItem("users", JSON.stringify(users));
+    }
+
+    document.getElementById("notes").value = notes;
+
+    function updateClock() {
+      const now = new Date();
+      const opts = { year:"numeric", month:"long", day:"numeric", hour:"2-digit", minute:"2-digit" };
+      document.getElementById("clock").textContent = now.toLocaleString("tr-TR", opts);
+    }
+
+    function scrollToPanel() {
+      document.getElementById("authSection").scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    function showAuth() {
+      document.getElementById("authSection").classList.remove("hidden");
+      document.getElementById("authSection").scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    function register() {
+      const u = document.getElementById("regUser").value.trim();
+      const p = document.getElementById("regPass").value.trim();
+      const admin = document.getElementById("regAdmin").value.trim();
+      const msg = document.getElementById("regMsg");
+
+      if (!u || !p || !admin) {
+        msg.textContent = "Tüm alanlar dolu olmalı.";
+        return;
+      }
+
+      if (admin !== ADMIN_CODE) {
+        msg.textContent = "Admin şifresi yanlış.";
+        return;
+      }
+
+      if (users.some(x => x.user === u)) {
+        msg.textContent = "Bu kullanıcı adı zaten var.";
+        return;
+      }
+
+      users.push({ user: u, pass: p });
+      localStorage.setItem("users", JSON.stringify(users));
+      msg.textContent = "Hesap oluşturuldu.";
+      document.getElementById("regUser").value = "";
+      document.getElementById("regPass").value = "";
+      document.getElementById("regAdmin").value = "";
+    }
+
+    function login() {
+      const u = document.getElementById("loginUser").value.trim();
+      const p = document.getElementById("loginPass").value.trim();
+      const msg = document.getElementById("loginMsg");
+
+      const found = users.find(x => x.user === u && x.pass === p);
+
+      if (!found) {
+        msg.textContent = "Hatalı giriş.";
+        return;
+      }
+
+      sessionUser = u;
+      localStorage.setItem("sessionUser", sessionUser);
+      msg.textContent = "";
+      document.getElementById("authSection").classList.add("hidden");
+      document.getElementById("appSection").classList.remove("hidden");
+      renderServices();
+      loadNotes();
+    }
+
+    function logout() {
+      sessionUser = "";
+      localStorage.removeItem("sessionUser");
+      document.getElementById("appSection").classList.add("hidden");
+      document.getElementById("authSection").classList.remove("hidden");
+    }
+
+    function addService() {
+      const customerName = document.getElementById("customerName").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+      const address = document.getElementById("address").value.trim();
+      const issue = document.getElementById("issue").value.trim();
+      const saveMsg = document.getElementById("saveMsg");
+
+      if (!customerName || !phone || !address || !issue) {
+        saveMsg.textContent = "Servis kaydı için tüm alanları doldur.";
+        return;
+      }
+
+      services.unshift({
+        customerName,
+        phone,
+        address,
+        issue,
+        date: new Date().toLocaleString("tr-TR")
+      });
+
+      localStorage.setItem("services", JSON.stringify(services));
+      renderServices();
+
+      document.getElementById("customerName").value = "";
+      document.getElementById("phone").value = "";
+      document.getElementById("address").value = "";
+      document.getElementById("issue").value = "";
+
+      saveMsg.textContent = "Servis kaydı eklendi.";
+    }
+
+    function renderServices() {
+      const list = document.getElementById("serviceList");
+      const countTag = document.getElementById("countTag");
+      const statServices = document.getElementById("statServices");
+
+      countTag.textContent = `${services.length} kayıt`;
+      statServices.textContent = services.length;
+
+      if (services.length === 0) {
+        list.innerHTML = '<div class="service"><strong>Henüz servis kaydı yok.</strong><p>İlk kaydı üstteki formdan ekleyebilirsin.</p></div>';
+        return;
+      }
+
+      list.innerHTML = services.map((s, i) => `
+        <div class="service">
+          <div class="service-top">
+            <div>
+              <strong>${escapeHtml(s.customerName)}</strong>
+              <div class="meta">
+                <span>${escapeHtml(s.phone)}</span>
+                <span>${escapeHtml(s.date)}</span>
+              </div>
+            </div>
+            <span class="tag">#${i + 1}</span>
+          </div>
+          <p><b>Adres:</b> ${escapeHtml(s.address)}</p>
+          <p><b>Arıza:</b> ${escapeHtml(s.issue)}</p>
+        </div>
+      `).join("");
+    }
+
+    function saveNotes() {
+      notes = document.getElementById("notes").value;
+      localStorage.setItem("notes", notes);
+      document.getElementById("statNotes").textContent = notes.trim() ? notes.trim().split(/\s+/).length : 0;
+    }
+
+    function loadNotes() {
+      document.getElementById("notes").value = localStorage.getItem("notes") || "";
+      const n = document.getElementById("notes").value.trim();
+      document.getElementById("statNotes").textContent = n ? n.split(/\s+/).length : 0;
+    }
+
+    function fillDemo() {
+      document.getElementById("regUser").value = "erişim";
+      document.getElementById("regPass").value = "123456";
+      document.getElementById("regAdmin").value = ADMIN_CODE;
+      document.getElementById("loginUser").value = DEFAULT_USER;
+      document.getElementById("loginPass").value = DEFAULT_PASS;
+      document.getElementById("notes").value = "Bugün klima montajı, akşam kombi bakımı, yarın yedek parça alınacak.";
+      saveNotes();
+      document.getElementById("authSection").classList.remove("hidden");
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function init() {
+      updateClock();
+      setInterval(updateClock, 60000);
+
+      if (sessionUser) {
+        document.getElementById("authSection").classList.add("hidden");
+        document.getElementById("appSection").classList.remove("hidden");
+      }
+
+      renderServices();
+      loadNotes();
+    }
+
+    init();
+  </script>
+</body>
+</html>
